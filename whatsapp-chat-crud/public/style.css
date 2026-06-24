@@ -1,0 +1,44 @@
+body {
+    margin-left: 20px;
+}
+
+.chat {
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 16px;
+    display: inline-block;
+}
+
+.msg {
+    background-color: dodgerblue;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 16px;
+}
+
+.new-chat {
+    color: white;
+    background-color: rgb(74, 167, 74);
+    outline: none;
+    padding: 0.5rem;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 16px;
+}
+.edit {
+    color: black;
+    background-color: aliceblue;
+}
+
+.edit, .delete {
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    margin-bottom: 5px;
+}
+
+.delete {
+    color: white;
+    background-color: rgb(185, 82, 82);
+}
