@@ -27,6 +27,8 @@ app.get("/books", async (req, res) => {
     res.render("index.ejs", { book });
 });
 
+
+//create route
 app.get("/books/new", (req, res) => {
     res.render("new.ejs");
 });
@@ -50,6 +52,7 @@ app.post("/books", (req, res) => {
      })
 });
 
+// delete route
 app.delete("/books/:id", async(req, res) => {
     let {id} = req.params;
     let deleteBook = await Book.findByIdAndDelete(id);
