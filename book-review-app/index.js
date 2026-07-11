@@ -33,6 +33,7 @@ app.get("/books/new", (req, res) => {
     res.render("new.ejs");
 });
 
+
 app.post("/books", (req, res) => {
     let { title, author, genre, rating } = req.body;
     let newbook = new Book({
@@ -50,6 +51,23 @@ app.post("/books", (req, res) => {
      .catch((err) => {
         console.log(err);
      })
+});
+
+app.get("/books/:id/edit", async (req, res) => {
+    let {id} = req.params;
+    let book = await Book.findById(id);
+    res.render("edit.ejs", { book });
+});
+
+app.put("/books/:id", async (req, res) => {
+    let {id} = req.params;
+    let {newRating} = req.body;
+    let updateRatinng = await Book.findByIdAndUpdate(
+        id,
+       { rating: newRating },
+       { runValidators: true, new: true }
+    );
+    res.redirect("/books");
 });
 
 // delete route
