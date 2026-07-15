@@ -21,12 +21,16 @@ async function main() {
     await mongoose.connect ('mongodb://127.0.0.1:27017/whatsapp');
 }
 
+function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch((err) =>  next(err));
+    };
+}
 //Index Route
-app.get("/chats", async (req, res) => {
+app.get("/chats", wrapAsync(async (req, res) => {
    let chats = await Chat.find();
-//    console.log(chats);
    res.render("index.ejs", { chats });
-});
+}));
 
 //New Route  
 app.get("/chats/new", (req, res) => {
@@ -34,7 +38,7 @@ app.get("/chats/new", (req, res) => {
 });
 
 //Create  Route
-app.post("/chats", (req, res) => {
+app.post("/chats", wrapAsync(async (req, res, next) => {
     let {from, to, msg} = req.body;
     let newChat = new Chat({
         from: from,
@@ -42,27 +46,20 @@ app.post("/chats", (req, res) => {
         msg: msg,
         created_at: new Date()
 });
-
-    newChat
-      .save()
-      .then((res) => {
-        console.log("chat was saved");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
+    await newChat.save();
     res.redirect("/chats");
-});
+}));
 
 //Edit Route
-app.get("/chats/:id/edit", async (req, res) => {
+app.get("/chats/:id/edit", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let chat = await Chat.findById(id);
     res.render("edit.ejs", { chat });
-});
+}));
 
 //Update Route
-app.put("/chats/:id", async (req, res) => {
+app.put("/chats/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let {newMsg} = req.body;
     let updatedChat = await Chat.findByIdAndUpdate(
@@ -73,19 +70,25 @@ app.put("/chats/:id", async (req, res) => {
     
     console.log(updatedChat);
     res.redirect("/chats");
-});
+}));
 
 //Destroy Route
-app.delete("/chats/:id", async (req, res) => {
+app.delete("/chats/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedChat = await Chat.findByIdAndDelete(id);
     console.log(deletedChat);
     res.redirect("/chats");
-});
+}));
 
 app.get("/", (req, res) => {
-    console.log("root is working");
+    res.send("root is working");
 });
+
+app.use((err, req, res, next) => {
+    let {status = 500, message = "SOME ERROR"} = err;
+    res.status(status).send(message);
+});
+
 
 app.listen(8080, () => {
     console.log("server is listening on port 8080");
