@@ -7,3 +7,5 @@ This repository contains **CRUD**  projects built while practicing Node.js, Expr
 2. whatsapp-chat-crud - A WhatsApp-style chat CRUD app built with Node.js, Express, MongoDB, Mongoose, and EJS. Supports creating, viewing, editing, and deleting chat messages with sender and receiver fields. Uses method-override for PUT and DELETE from HTML forms.
 
 3. Student Marks Tracker app - built with Node.js, Express, MongoDB, Mongoose, and EJS. Displays a list of students with their subject and marks fetched from a MongoDB database. Supports adding new students, editing existing marks, and deleting records. Uses a separate init.js file to insert initial dummy data into the database. Built using full RESTful CRUD routes with method-override for PUT and DELETE from HTML forms.
+
+4. book-review-app - A full-stack CRUD app built with Node.js, Express, MongoDB, Mongoose, and EJS to manage a personal book collection. Supports adding new books with title, author, genre, and rating, updating ratings, and deleting records. Built using RESTful CRUD routes with method-override for PUT and DELETE from HTML forms.
