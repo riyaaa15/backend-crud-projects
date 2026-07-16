@@ -42,3 +42,66 @@ body {
     color: white;
     background-color: rgb(185, 82, 82);
 }
+
+.form-container {
+    background-color: aliceblue;
+    padding: 30px;
+    border-radius: 16px;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-container h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 300px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+    border: none;
+    outline: none;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-shadow: inset 0 0 0 1px #d0e0f0;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+    border-radius: 16px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    box-shadow: inset 0 0 0 2px dodgerblue;
+}
+
+.chat-form .new-chat {
+    align-self: flex-start;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
