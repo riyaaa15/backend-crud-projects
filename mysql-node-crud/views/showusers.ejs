@@ -4,38 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users</title>
-    <style>
+    <link rel="stylesheet" href="/style.css">
+    <!-- <style>
         table, th, td {
             border: 1px solid black;
         }
-    </style>
+    </style> -->
 </head>
 <body>
-    <a href="/user/new"><button>Add New User</button></a>
+    <a href="/user/new"><button class="add-btn">Add New User</button></a>
     <table>
         <tr>
             <th>Id</th>
             <th>Email</th>
             <th>Username</th>
+            <th></th>
+            <th></th>
         </tr>
         <% for(user of users) { %>
             <tr>
                 <td><%= user.id %></td>
-                <td><%= user.email%></td>
-                <td><%= user.username%></td>
+                <td><%= user.email %></td>
+                <td><%= user.username %></td>
                 <td>
-                <form method="GET" action="/user/<%=user.id%>/edit">
-                    <button>Edit username</button>
-                </form>
+                    <form method="GET" action="/user/<%=user.id%>/edit">
+                        <button class="edit-btn">Edit username</button>
+                    </form>
                 </td>
                 <td>
-               <form method="GET" action="/user/<%=user.id%>/delete">
-                <button>Delete</button>
-               </form>
+                    <form method="GET" action="/user/<%=user.id%>/delete">
+                        <button class="delete-btn">Delete</button>
+                    </form>
                 </td>
             </tr>
         <% } %>
     </table>
 </body>
 </html>
-
