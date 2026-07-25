@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h2>The total number of user are : <%= count %></h2>
-    <button>Join us today!</button>
+    <div class="form-container">
+        <h3>Welcome!</h3>
+        <p style="color: #444; margin-bottom: 20px;">Total number of users: <b><%= count %></b></p>
+        <a href="/user/new"><button class="add-btn">Join us today!</button></a>
+    </div>
 </body>
 </html>
