@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit username</title>
+    <title>Edit Username</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h2>you are about to edit the user: <%= user.email %></h2>
-    <form method="post" action="/user/<%=user.id%>?_method=PATCH">
-        <textarea name="username"><%= user.username %></textarea>
-        <input type="password" name="password" placeholder="enter password">
-        <button>Edit</button>
-    </form>
+    <div class="form-container">
+        <h3>Edit Username</h3>
+        <p style="color: #444; margin-bottom: 20px;">Editing user: <b><%= user.email %></b></p>
+        <form method="post" action="/user/<%=user.id%>?_method=PATCH" class="chat-form">
+            <div class="form-group">
+                <label>New Username</label>
+                <textarea name="username"><%= user.username %></textarea>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password">
+            </div>
+            <button class="add-btn">Edit</button>
+        </form>
+    </div>
 </body>
 </html>
