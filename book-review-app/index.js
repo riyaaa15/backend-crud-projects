@@ -13,7 +13,7 @@ app.use(methodOverride("_method"));
 
 main()
  .then(() => {
-    console.log("connection sucessful");
+    console.log("connection successful");
  })
  .catch(err => console.log(err));
 
@@ -21,11 +21,21 @@ async function main() {
     await mongoose.connect ('mongodb://127.0.0.1:27017/Library');
 };
 
+function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch((err) => next(err));
+    };
+}
+
+app.get("/", (req, res) => {
+    res.send("root is working");
+});
+
 //index route 
-app.get("/books", async (req, res) => {
+app.get("/books", wrapAsync(async (req, res) => {
     let book = await Book.find();
     res.render("index.ejs", { book });
-});
+}));
 
 
 //create route
@@ -34,7 +44,7 @@ app.get("/books/new", (req, res) => {
 });
 
 
-app.post("/books", (req, res) => {
+app.post("/books", wrapAsync(async(req, res) => {
     let { title, author, genre, rating } = req.body;
     let newbook = new Book({
         title: title,
@@ -43,23 +53,17 @@ app.post("/books", (req, res) => {
         rating: rating,
     });
 
-    newbook
-     .save()
-     .then(() => {
-        res.redirect("/books");
-     })
-     .catch((err) => {
-        console.log(err);
-     })
-});
+    await newbook.save();
+    res.redirect("/books");
+}));
 
-app.get("/books/:id/edit", async (req, res) => {
+app.get("/books/:id/edit", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let book = await Book.findById(id);
     res.render("edit.ejs", { book });
-});
+}));
 
-app.put("/books/:id", async (req, res) => {
+app.put("/books/:id", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let {newRating} = req.body;
     let updateRatinng = await Book.findByIdAndUpdate(
@@ -68,18 +72,24 @@ app.put("/books/:id", async (req, res) => {
        { runValidators: true, new: true }
     );
     res.redirect("/books");
-});
+}));
 
 // delete route
-app.delete("/books/:id", async(req, res) => {
+app.delete("/books/:id", wrapAsync(async(req, res) => {
     let {id} = req.params;
     let deleteBook = await Book.findByIdAndDelete(id);
     res.redirect("/books");
+}));
+
+app.use((err, req, res, next) => {
+    if(err.name === "ValidationError") {
+        err.status = 400;
+        err.message = "Validation failed: " + Object.values(err.errors).map(e => e.message).join(", ");
+    }
+    let {status = 500, message = "SOME ERROR"} = err;
+    res.status(status).send(message);
 });
 
-app.get("/", (req, res) => {
-    console.log("root is working");
-});
 
 app.listen(8080, () => {
     console.log("server is listening on port 8080");
