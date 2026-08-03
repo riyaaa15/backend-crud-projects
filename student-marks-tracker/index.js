@@ -21,11 +21,21 @@ async function main() {
     await mongoose.connect ('mongodb://127.0.0.1:27017/School');
 };
 
+function wrapAsync(fn) {
+    return function(req, res, next) {
+        fn(req, res, next).catch((err) => next(err));
+    };
+}
+
+app.get("/", (req, res) => {
+    console.log("root is working");
+});
+
 //Index Route
-app.get("/students", async (req, res) => {
+app.get("/students", wrapAsync(async (req, res) => {
     let data = await Data.find();
     res.render("index.ejs", { data });
-});
+}));
 
 // FORM new ejs
 app.get("/students/new", (req, res) => {
@@ -33,32 +43,25 @@ app.get("/students/new", (req, res) => {
 });
 
 //Create route 
-app.post("/students", (req, res) => {
+app.post("/students", wrapAsync(async(req, res) => {
     let {name, subject, marks} = req.body;
     let newStudent = new Data({
         name: name,
         subject: subject,
         marks: marks,
 });
-
-newStudent
-  .save()
-  .then(() => {
+    await newStudent.save();
     res.redirect("/students");
-   })
-   .catch((err) => {
-     console.log(err);
-   })
-});
+}));
 
 // Form for edit route
-app.get("/students/:id/edit", async (req, res) => {
+app.get("/students/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let student = await Data.findById(id);
     res.render("edit.ejs", { student });
-});
+}));
 
-app.put("/students/:id", async (req, res) => {
+app.put("/students/:id", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let {newMarks} = req.body;
     let updatedMarks = await Data.findByIdAndUpdate(
@@ -67,17 +70,15 @@ app.put("/students/:id", async (req, res) => {
         { runValidators: true, new: true }
     );
     res.redirect("/students");
-});
+}));
 
-app.delete("/students/:id", async (req, res) => {
+app.delete("/students/:id", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let deleteChat = await Data.findByIdAndDelete(id);
     res.redirect("/students");
-});
+}));
 
-app.get("/", (req, res) => {
-    console.log("root is working");
-});
+
 
 app.listen(8080, () => {
     console.log("server is listening on port 8080");
