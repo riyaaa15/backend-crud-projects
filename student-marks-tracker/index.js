@@ -37,7 +37,7 @@ app.get("/students", wrapAsync(async (req, res) => {
     res.render("index.ejs", { data });
 }));
 
-// FORM new ejs
+
 app.get("/students/new", (req, res) => {
     res.render("new.ejs");
 });
@@ -72,13 +72,23 @@ app.put("/students/:id", wrapAsync(async (req, res) => {
     res.redirect("/students");
 }));
 
+//delete route
 app.delete("/students/:id", wrapAsync(async (req, res) => {
     let {id} = req.params;
     let deleteChat = await Data.findByIdAndDelete(id);
     res.redirect("/students");
 }));
 
-
+// Mongoose validationError handler
+app.use((err, req, res, next) => {
+    if(err.name === "ValidationError") {
+        err.status = 400;
+        err.message = "Validation failed: " + Object.values(err.errors).map(e => e.message).join(", ");
+    }
+    //default error handler
+    let {status = 500, message = "SOME ERROR"} = err;
+    res.status(status).send(message);
+});
 
 app.listen(8080, () => {
     console.log("server is listening on port 8080");
